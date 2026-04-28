@@ -13,13 +13,15 @@ import { useState } from "react";
     100 = Domain Complete
 
   certified: true when they pass the real exam
+
+  Overall progress = SUM(domain_value * domain_weight) + 5 if certified.
+  Weights match the AWS exam blueprints (see CCP_WEIGHTS / CAIP_WEIGHTS below).
 */
 
 const CCP_DATA = [
   { name: "Kate", domains: [0, 0, 0, 0], certified: false },
   { name: "Steven", domains: [0, 0, 0, 0], certified: false },
   { name: "Simone Levy", domains: [0, 0, 0, 0], certified: false },
-  { name: "Elena Porras", domains: [0, 0, 0, 0], certified: false },
 ];
 
 const CAIP_DATA = [
@@ -28,17 +30,23 @@ const CAIP_DATA = [
   { name: "Zohaib Akram", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Zach Womack", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Bharat Yalamarthi", domains: [0, 0, 0, 0, 0], certified: false },
-  { name: "Muhammad Zuhdi", domains: [0, 0, 0, 0, 0], certified: false },
+  { name: "Muhammad Zuhdi", domains: [12, 0, 0, 0, 0], certified: false },
+  { name: "Elena Porras", domains: [100, 12, 0, 0, 0], certified: false },
 ];
 
 const CCP_DOMAINS = ["Cloud Concepts", "Security & Compliance", "Cloud Tech & Services", "Billing & Support"];
 const CAIP_DOMAINS = ["AI & ML Fundamentals", "GenAI Fundamentals", "Foundation Models", "Responsible AI", "Security & Gov."];
 
+// Equal weight for now; swap to [0.24, 0.30, 0.34, 0.12] to match the AWS CCP exam blueprint.
+const CCP_WEIGHTS = [0.25, 0.25, 0.25, 0.25];
+// Matches the CAIP Excel tracker and the AWS CAIP exam blueprint.
+const CAIP_WEIGHTS = [0.15, 0.45, 0.20, 0.10, 0.10];
+
 const TITLES = ["Squire", "Apprentice", "Knight", "Vanguard", "Champion", "Dragon Slayer"];
 
-const getProgress = (p) => {
-  const avg = p.domains.reduce((a, b) => a + b, 0) / p.domains.length;
-  return Math.min(100, avg + (p.certified ? 5 : 0));
+const getProgress = (p, weights) => {
+  const weighted = p.domains.reduce((sum, d, i) => sum + d * weights[i], 0);
+  return Math.min(100, weighted + (p.certified ? 5 : 0));
 };
 
 const getTitle = (progress, certified) => {
@@ -115,8 +123,8 @@ const Card = ({ children, style = {}, highlight = false }) => (
   </div>
 );
 
-const DragonQueenBanner = ({ data, theme }) => {
-  const avgProgress = data.reduce((s, p) => s + getProgress(p), 0) / data.length;
+const DragonQueenBanner = ({ data, theme, weights }) => {
+  const avgProgress = data.reduce((s, p) => s + getProgress(p, weights), 0) / data.length;
   const queenPower = Math.max(0, 100 - avgProgress);
   const dragonsSlain = data.filter(p => p.certified).length;
   const totalQuesters = data.length;
@@ -196,8 +204,8 @@ const DragonQueenBanner = ({ data, theme }) => {
   );
 };
 
-const QuestRow = ({ person, index, domains, totalDomains, theme }) => {
-  const progress = getProgress(person);
+const QuestRow = ({ person, index, domains, totalDomains, theme, weights }) => {
+  const progress = getProgress(person, weights);
   const dragonHP = Math.max(0, 100 - progress);
   const title = getTitle(progress, person.certified);
   const domainsComplete = person.domains.filter(d => d === 100).length;
@@ -360,7 +368,8 @@ export default function App() {
   const theme = THEMES[tab];
   const data = tab === "ccp" ? CCP_DATA : CAIP_DATA;
   const domains = tab === "ccp" ? CCP_DOMAINS : CAIP_DOMAINS;
-  const sorted = [...data].sort((a, b) => getProgress(b) - getProgress(a));
+  const weights = tab === "ccp" ? CCP_WEIGHTS : CAIP_WEIGHTS;
+  const sorted = [...data].sort((a, b) => getProgress(b, weights) - getProgress(a, weights));
 
   const inactiveTabStyle = {
     padding: "10px 0", borderRadius: "12px", border: "none",
@@ -432,7 +441,7 @@ export default function App() {
       </div>
 
       <SectionLabel>The Dragon Queen</SectionLabel>
-      <DragonQueenBanner data={data} theme={theme} />
+      <DragonQueenBanner data={data} theme={theme} weights={weights} />
 
       <div style={{ height: "20px" }} />
 
@@ -446,6 +455,7 @@ export default function App() {
             domains={domains}
             totalDomains={domains.length}
             theme={theme}
+            weights={weights}
           />
         ))}
       </div>
