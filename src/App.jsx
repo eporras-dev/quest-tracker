@@ -1,19 +1,16 @@
 import { useState } from "react";
 
 /*
-
-  domains: array of numbers per domain
-    0   = Not Started
-    12  = Just Getting Started
-    25  = Making Progress
-    40  = Building Momentum
-    50  = Halfway There
-    65  = Strong Progress
-    80  = Almost Done
-    100 = Domain Complete
-
+ 
+  domains: array of numbers per domain — match the Excel dropdown:
+    "Not Started"        = 0
+    "Started Reviewing"  = 25
+    "Halfway Through"    = 50
+    "Almost Done"        = 75
+    "Domain Complete"    = 100
+ 
   certified: true when they pass the real exam
-
+ 
   Overall progress = SUM(domain_value * domain_weight) + 5 if certified.
   Weights match the AWS exam blueprints (see CCP_WEIGHTS / CAIP_WEIGHTS below).
 */
@@ -30,8 +27,8 @@ const CAIP_DATA = [
   { name: "Zohaib Akram", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Zach Womack", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Bharat Yalamarthi", domains: [0, 0, 0, 0, 0], certified: false },
-  { name: "Muhammad Zuhdi", domains: [12, 0, 0, 0, 0], certified: false },
-  { name: "Elena Porras", domains: [100, 12, 0, 0, 0], certified: false },
+  { name: "Muhammad Zuhdi", domains: [25, 0, 0, 0, 0], certified: false },
+  { name: "Elena Porras", domains: [100, 25, 0, 0, 0], certified: false },
 ];
 
 const CCP_DOMAINS = ["Cloud Concepts", "Security & Compliance", "Cloud Tech & Services", "Billing & Support"];
