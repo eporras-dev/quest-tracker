@@ -28,7 +28,7 @@ const CAIP_DATA = [
   { name: "Zach Womack", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Bharat Yalamarthi", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Muhammad Zuhdi", domains: [25, 0, 0, 0, 0], certified: false },
-  { name: "Elena Porras", domains: [100, 25, 0, 0, 0], certified: false },
+  { name: "Elena Porras", domains: [100, 50, 0, 0, 0], certified: false },
 ];
 
 const CCP_DOMAINS = ["Cloud Concepts", "Security & Compliance", "Cloud Tech & Services", "Billing & Support"];
