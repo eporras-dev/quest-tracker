@@ -17,7 +17,7 @@ import { useState } from "react";
 
 const CCP_DATA = [
   { name: "Kate", domains: [0, 0, 0, 0], certified: false },
-  { name: "Steven", domains: [0, 0, 0, 0], certified: false },
+  { name: "Steven", domains: [25, 0, 0, 0], certified: false },
   { name: "Simone Levy", domains: [0, 0, 0, 0], certified: false },
 ];
 
@@ -28,7 +28,7 @@ const CAIP_DATA = [
   { name: "Zach Womack", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Bharat Yalamarthi", domains: [0, 0, 0, 0, 0], certified: false },
   { name: "Muhammad Zuhdi", domains: [25, 0, 0, 0, 0], certified: false },
-  { name: "Elena Porras", domains: [100, 50, 0, 0, 0], certified: false },
+  { name: "Elena Porras", domains: [100, 75, 0, 0, 0], certified: false },
 ];
 
 const CCP_DOMAINS = ["Cloud Concepts", "Security & Compliance", "Cloud Tech & Services", "Billing & Support"];
